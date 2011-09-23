@@ -151,9 +151,11 @@ var tetris = {
 		initTimer:function() {
 				var me = this;
 				var tLoop = function() {
+                    // step the time up, update the screen, and wait for next step
 					me.incTime();
 					me.timer = setTimeout(tLoop,2000);
 				};
+                // start the timer
 				this.timer = setTimeout(tLoop,2000);
 		},
 
@@ -307,6 +309,7 @@ var tetris = {
 
 		play:function() { //gameLoop
 			var me = this;
+            // create side-bar timer
 			if (this.timer === null) {
 				this.initTimer();
 			}
@@ -326,6 +329,7 @@ var tetris = {
 					me.pTimer = setTimeout(gameLoop,me.speed);
 				}
 			};
+            // start the blocks falling
 			this.pTimer = setTimeout(gameLoop,me.speed);
 			this.isActive = 1;
 		},
