@@ -70,9 +70,14 @@ var tetris = {
 		},
 
 		initBoard:function() {
+            // boardHeight/Width are in grid units
 			this.boardHeight = this.canvasHeight/this.pSize;
 			this.boardWidth = this.canvasWidth/this.pSize;
+
+            // s is the total number of blocks in a board
 			var s = this.boardHeight * this.boardWidth;
+            
+            // initialize the board as empty
 			for (var i=0;i<s;i++) {
 				this.board.push(0);
 			}
@@ -80,11 +85,14 @@ var tetris = {
 		},
 
 		initInfo:function() {
+            // register text fields in the DOM with keywords for easy access later
 			this.nextShapeDisplay = document.getElementById("next_shape");
 			this.levelDisplay = document.getElementById("level").getElementsByTagName("span")[0];
 			this.timeDisplay = document.getElementById("time").getElementsByTagName("span")[0];
 			this.scoreDisplay = document.getElementById("score").getElementsByTagName("span")[0];
 			this.linesDisplay = document.getElementById("lines").getElementsByTagName("span")[0];
+            
+            // update the display of game data for the first time
 			this.setInfo('time');
 			this.setInfo('score');
 			this.setInfo('level');
@@ -158,6 +166,7 @@ var tetris = {
 		},
 
 		setInfo:function(el) {
+            // updates the DOM representation of data in the game
 			this[el + 'Display'].innerHTML = this[el];
 		},
 
