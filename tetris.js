@@ -1,4 +1,5 @@
 (function() {
+
 var tetris = {
 		board:[],
 		boardDiv:null,
@@ -57,7 +58,7 @@ var tetris = {
 		sTimer:null,
 		speed:700,
 		lines:0,
-    
+
 		init:function() {
 			this.canvas = document.getElementById("canvas");
 			this.initBoard();
@@ -67,6 +68,7 @@ var tetris = {
 			this.bindKeyEvents();
 			this.play();
 		},
+
 		initBoard:function() {
 			this.boardHeight = this.canvasHeight/this.pSize;
 			this.boardWidth = this.canvasWidth/this.pSize;
@@ -76,6 +78,7 @@ var tetris = {
 			}
 			//this.boardDiv = document.getElementById('board'); // for debugging
 		},
+
 		initInfo:function() {
 			this.nextShapeDisplay = document.getElementById("next_shape");
 			this.levelDisplay = document.getElementById("level").getElementsByTagName("span")[0];
@@ -87,6 +90,7 @@ var tetris = {
 			this.setInfo('level');
 			this.setInfo('lines');
 		},
+
 		initShapes:function() {
 			this.curSqs = [];
 			this.curComplete = false;
@@ -97,6 +101,7 @@ var tetris = {
 			this.setCurCoords(this.spawnX,this.spawnY);
 			this.drawShape(this.curX,this.curY,this.curShape);
 		},
+
 		initNextShape:function() {
 			if (typeof this.tempShapes[1] === 'undefined') {this.initTempShapes();}
 			try {
@@ -107,6 +112,7 @@ var tetris = {
 				throw new Error("Could not create next shape. " + e);
 			}
 		},
+
 		initTempShapes:function() {
 			this.tempShapes = [];
 			for (var i = 0;i<this.shapes.length;i++) {
@@ -121,6 +127,7 @@ var tetris = {
 				this.tempShapes[j] = tempk;
 			}
 		},
+
 		shiftTempShapes:function() {
 			try {
 				if (typeof this.tempShapes === 'undefined' || this.tempShapes === null) {
@@ -132,6 +139,7 @@ var tetris = {
 				throw new Error("Could not shift or init tempShapes:  " + e);
 			}
 		},
+
 		initTimer:function() {
 				var me = this;
 				var tLoop = function() {
@@ -140,6 +148,7 @@ var tetris = {
 				};
 				this.timer = setTimeout(tLoop,2000);
 		},
+
 		initLevelScores:function() {
 			var c = 1;
 			for (var i=1;i<=this.numLevels;i++) {
@@ -147,9 +156,11 @@ var tetris = {
 				c = c + c;
 			}
 		},
+
 		setInfo:function(el) {
 			this[el + 'Display'].innerHTML = this[el];
 		},
+
 		drawNextShape:function() {
 				var ns = [];
 				for (var i=0;i<this.nextShape.length;i++) {
@@ -160,6 +171,7 @@ var tetris = {
 					this.nextShapeDisplay.appendChild(ns[k]);
 				}
 		},
+
 		drawShape:function(x,y,p) {
 			for (var i=0;i<p.length;i++) {
 				var newX = p[i][0] + x;
@@ -170,6 +182,7 @@ var tetris = {
 				this.canvas.appendChild(this.curSqs[k]);
 			}
 		},
+
 		createSquare:function(x,y,type) {
 			var el = document.createElement('div');
 			el.className = 'square type'+type;
@@ -177,6 +190,7 @@ var tetris = {
 			el.style.top = y * this.pSize + 'px';
 			return el;
 		},
+
 		removeCur:function() {
 			var me = this;
 			this.curSqs.eachdo(function() {
@@ -184,10 +198,12 @@ var tetris = {
 			});
 			this.curSqs = [];
 		},
+
 		setCurCoords:function(x,y) {
 			this.curX = x;
 			this.curY = y;
 		},
+
 		bindKeyEvents:function() {
 			var me = this;
 			var event = "keypress";
@@ -201,6 +217,7 @@ var tetris = {
 				document.attachEvent('on' + event,cb);
 			}
 		},
+
 		handleKey:function(e) {
 			var c = this.whichKey(e);
 			var dir = '';
@@ -224,29 +241,35 @@ var tetris = {
 					break;
 			}
 		},
+
 		whichKey:function(e) {
 			var c;
 			if (window.event) {c = window.event.keyCode;}
 			else if (e) {c = e.keyCode;}
 			return c;
 		},
+
 		incTime:function() {
 			this.time++;
 			this.setInfo('time');
 		},
+
 		incScore:function(amount) {
 			this.score = this.score + amount;
 			this.setInfo('score');
 		},
+
 		incLevel:function() {
 			this.level++;
 			this.speed = this.speed - 75;
 			this.setInfo('level');
 		},
+
 		incLines:function(num) {
 			this.lines += num;
 			this.setInfo('lines');
 		},
+
 		calcScore:function(args) {
 			var lines = args.lines || 0;
 			var shape = args.shape || false;
@@ -261,15 +284,18 @@ var tetris = {
 			// if (speed > 0) {score += speed*this["level"+this.level[3]];} TODO: implement speed score
 			this.incScore(score);
 		},
+
 		checkScore:function() {
 			if (this.score >= this['level' + this.level][0]) {
 				this.incLevel();
 			}
 		},
+
 		gameOver:function() {
 			this.clearTimers();
 			this.canvas.innerHTML = "<h1>GAME OVER</h1>";
 		},
+
 		play:function() { //gameLoop
 			var me = this;
 			if (this.timer === null) {
@@ -294,18 +320,21 @@ var tetris = {
 			this.pTimer = setTimeout(gameLoop,me.speed);
 			this.isActive = 1;
 		},
+
 		togglePause:function() {
 			if (this.isActive === 1) {
 				this.clearTimers();
 				this.isActive = 0;
 			} else {this.play();} 
 		},
+
 		clearTimers:function() {
 			clearTimeout(this.timer);
 			clearTimeout(this.pTimer);
 			this.timer = null;
 			this.pTimer = null;
 		},
+
 		move:function(dir) {
 			var s = '';
 			var me = this;
@@ -345,6 +374,7 @@ var tetris = {
 				this.curComplete = true;
 			}
 		},
+
 		rotate:function() {
 			if (this.curShapeIndex !== 6) { // if not the square
 				var temp = [];
@@ -358,10 +388,12 @@ var tetris = {
 				} else { throw new Error("Could not rotate!");}
 			}
 		},
+
 		checkMove:function(x,y,p) {
 			if (this.isOB(x,y,p) || this.isCollision(x,y,p)) {return false;}
 			return true;
 		},
+
 		isCollision:function(x,y,p) {
 			var me = this;
 			var bool = false;
@@ -372,6 +404,7 @@ var tetris = {
 			});
 			return bool;
 		},
+
 		isOB:function(x,y,p) { 
 			var w = this.boardWidth - 1;
 			var h = this.boardHeight - 1;
@@ -383,6 +416,7 @@ var tetris = {
 			});
 			return bool;
 		},
+
 		getRowState:function(y) { //Empty, Full, or Used
 			var c = 0;
 			for (var x=0;x<this.boardWidth;x++) {
@@ -392,6 +426,7 @@ var tetris = {
 			if (c === this.boardWidth) {return 'F';}
 			return 'U';
 		},
+
 		checkRows:function() { //does check for full lines, removes them, and shifts everything else down
 			/*var me = this;
 			var memo = 0;
@@ -446,6 +481,7 @@ var tetris = {
 				this.calcScore({lines:c});
 			}
 		},
+
 		shiftRow:function(y,amount) {
 			var me = this;
 			for (var x=0;x<this.boardWidth;x++) {
@@ -457,16 +493,19 @@ var tetris = {
 			}
 			me.emptyBoardRow(y);
 		},
+
 		emptyBoardRow:function(y) { // empties a row in the board array
 			for (var x=0;x<this.boardWidth;x++) {
 				this.markBoardAt(x,y,0);
 			}
 		},
+
 		removeRow:function(y) {
 			for (var x=0;x<this.boardWidth;x++) {
 				this.removeBlock(x,y);
 			}
 		},
+
 		removeBlock:function(x,y) {
 			var me = this;
 			this.markBoardAt(x,y,0);
@@ -477,6 +516,7 @@ var tetris = {
 				}
 			});
 		},
+
 		setBlock:function(x,y,block) {
 			this.markBoardAt(x,y,1);
 			var newX = x * this.pSize;
@@ -484,25 +524,31 @@ var tetris = {
 			block.style.left = newX + 'px';
 			block.style.top = newY + 'px';
 		},
+
 		isAt:function(x,y,block) { // is given block at x,y?
 			if(this.getPos(block)[0] === x && this.getPos(block)[1] === y) {return true;}
 			return false;
 		},
+
 		getPos:function(block) { // returns [x,y] block position
 			var p = [];
 			p.push(parseInt(block.style.left,10)/this.pSize);
 			p.push(parseInt(block.style.top,10)/this.pSize);
 			return p;
 		},
+
 		getBoardIdx:function(x,y) { // returns board array index for x,y coords
 			return x + (y*this.boardWidth);
 		},
+
 		boardPos:function(x,y) { // returns value at this board position
 			return this.board[x+(y*this.boardWidth)];
 		},
+
 		markBoardAt:function(x,y,val) {
 			this.board[this.getBoardIdx(x,y)] = val;
 		},
+
 		markBoardShape:function(x,y,p) {
 			var me = this;
 			p.eachdo(function(i) {
@@ -511,18 +557,23 @@ var tetris = {
 				me.markBoardAt(newX,newY,1);
 			});
 		},
+
 		isIE:function() {
 			return this.bTest(/IE/);
 		},
+
 		isFirefox:function() {
 			return this.bTest(/Firefox/);
 		},
+
 		isSafari:function() {
 			return this.bTest(/Safari/);
 		},
+
 		bTest:function(rgx) {
 			return rgx.test(navigator.userAgent);
 		}
+
 		/*debug:function() {
 			var me = this;
 			var str = '';
@@ -537,6 +588,7 @@ var tetris = {
 			me.boardDiv.appendChild(par);
 		},*/
 };
+
 tetris.init();
 })();
 
