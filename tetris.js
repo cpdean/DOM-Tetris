@@ -369,7 +369,7 @@ var tetris = {
 					return true;
 					break;
 				case 'F':
-					this.rotate(); // mapped to known function for debugging
+					this.fall(); // mapped to known function for debugging
 					return true;
 					break;
 				default:
@@ -402,6 +402,37 @@ var tetris = {
 					this.drawShape(this.curX,this.curY,this.curShape);
 				} else { throw new Error("Could not rotate!");}
 			}
+		},
+
+		fall:function() {
+            downwardMove = this.collisionDistance(this.curX,this.curY,this.curShape);
+            console.log(downwardMove); // debug
+		},
+
+		collisionDistance:function(x,y,shape) {
+            // Gives you the distance the shape must travel downward before it will
+            // touch other blocks on the board
+            var me = this;
+            distances = [];
+            shape.eachdo(function(){
+                var blockX = this[0] + x;
+                var blockY = this[1] + y;
+                distances.push(me.blockCollisionDistance(blockX,blockY));
+            });
+            return Math.min.apply(null,distances);
+		},
+
+		blockCollisionDistance:function(x,y) {
+            // From the given block coords, returns the
+            // distance to a collision.
+			var h = this.boardHeight - 1;  //position of bottom row
+            var distanceToBottom = h - y;
+			for (var boardY=y;boardY<h;boardY++) {
+                if(this.boardPos(x,boardY) === 1){
+                    return boardY - y;
+                }
+            }
+            return distanceToBottom;
 		},
 
 		checkMove:function(x,y,p) {
