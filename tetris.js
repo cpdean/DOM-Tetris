@@ -11,27 +11,51 @@ var tetris = {
 		boardWidth:0,
 		spawnX:4,
 		spawnY:1,
+        // A shape is defined by a list of block locations.
+        // The block locations are defined by the distance from the origin.
+        // block [0,0]
 		shapes:[
 			[
-				[-1,1],[0,1],[1,1],[0,0] //TEE
+				[-1,1],
+                [0,1],
+                [1,1],
+                [0,0] //TEE
 			],
 			[
-				[-1,0],[0,0],[1,0],[2,0] //line
+				[-1,0],
+                [0,0],
+                [1,0],
+                [2,0] //line
 			],
 			[
-				[-1,-1],[-1,0],[0,0],[1,0] //L EL
+				[-1,-1],
+                [-1,0],
+                [0,0],
+                [1,0] //L EL
 			],
 			[
-				[1,-1],[-1,0],[0,0],[1,0] //R EL
+				[1,-1],
+                [-1,0],
+                [0,0],
+                [1,0] //R EL
 			],
 			[
-				[0,-1],[1,-1],[-1,0],[0,0] //R ess
+				[0,-1],
+                [1,-1],
+                [-1,0],
+                [0,0] //R ess
 			],
 			[
-				[-1,-1],[0,-1],[0,0],[1,0] // L ess
+				[-1,-1],
+                [0,-1],
+                [0,0],
+                [1,0] // L ess
 			],
 			[
-				[0,-1],[1,-1],[0,0],[1,0] // square
+				[0,-1],
+                [1,-1],
+                [0,0],
+                [1,0] // square
 			]
 		],
 		tempShapes:null,
@@ -314,6 +338,9 @@ var tetris = {
 				this.initTimer();
 			}
 			var gameLoop = function() {
+                // Advance the game forward by one tick
+
+                // Move the piece down one.
 				me.move('D');
 				if(me.curComplete) {
 					me.markBoardShape(me.curX,me.curY,me.curShape);
@@ -351,8 +378,13 @@ var tetris = {
 		move:function(dir) {
 			var s = '';
 			var me = this;
+
+            // set temp vars to hold current position
 			var tempX = this.curX;
 			var tempY = this.curY;
+
+            // calculate the proposed position
+            // of the current shape in play
 			switch(dir) {
 				case 'L':
 					s = 'left';
@@ -374,6 +406,7 @@ var tetris = {
 					throw new Error('wtf');
 					break;       
 			}
+
 			if (this.checkMove(tempX,tempY,this.curShape)) {
 				this.curSqs.eachdo(function(i) {
 					var l = parseInt(this.style[s],10);
@@ -403,6 +436,8 @@ var tetris = {
 		},
 
 		checkMove:function(x,y,p) {
+            // check to see if the current shape can exist
+            // at the proposed position (tempX,tempY)
 			if (this.isOB(x,y,p) || this.isCollision(x,y,p)) {return false;}
 			return true;
 		},
