@@ -234,6 +234,9 @@ var tetris = {
 				case 40:
 					this.move('D');
 					break;
+				case 32:  // 32=spacebar
+					this.move('F'); // fall
+					break;
 				case 27: //esc:pause
 					this.togglePause();
 					break;
