@@ -427,6 +427,9 @@ var tetris = {
 				this.curShape.eachdo(function() {
 					temp.push([this[1] * -1,this[0]]); // (-y,x)
 				});
+                // create a new shape (temp) where the block orientation is rotated
+                // from the current shape in play
+
 				if (this.checkMove(this.curX,this.curY,temp)) {
 					this.curShape = temp;
 					this.removeCur();
@@ -446,18 +449,24 @@ var tetris = {
 			var me = this;
 			var bool = false;
 			p.eachdo(function() {
+                // 'this' keyword refers to a single block in a tetroid
 				var newX = this[0] + x;
 				var newY = this[1] + y;
+                // (x,y) are the coords for the origin point
+                // (newX,newY) are the coords for the block in question
 				if (me.boardPos(newX,newY) === 1) {bool = true;}
+                // if a block currently occupies the spot, then it's a collision
 			});
 			return bool;
 		},
 
 		isOB:function(x,y,p) { 
+            // I assume OB means "over board"
 			var w = this.boardWidth - 1;
 			var h = this.boardHeight - 1;
 			var bool = false;
 			p.eachdo(function() {
+                // 'this' keyword refers to a single block in a tetroid
 				var newX = this[0] + x;
 				var newY = this[1] + y;
 				if(newX < 0 || newX > w || newY < 0 || newY > h) {bool = true;}
