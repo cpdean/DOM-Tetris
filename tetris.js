@@ -427,9 +427,9 @@ var tetris = {
             // distance to a collision.
 			var h = this.boardHeight - 1;  //position of bottom row
             var distanceToBottom = h - y;
-			for (var boardY=y;boardY<h;boardY++) {
+			for (var boardY=y;boardY<=h;boardY++) {
                 if(this.boardPos(x,boardY) === 1){
-                    return boardY - y;
+                    return boardY - y - 1;
                 }
             }
             return distanceToBottom;
