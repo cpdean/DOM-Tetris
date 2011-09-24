@@ -209,6 +209,7 @@ var tetris = {
 
 		drawShape:function(x,y,p) {
 			for (var i=0;i<p.length;i++) {
+                // p[i] is a given block in the tetroid
 				var newX = p[i][0] + x;
 				var newY = p[i][1] + y;
 				this.curSqs[i] = this.createSquare(newX,newY,this.curShapeIndex);
