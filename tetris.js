@@ -421,6 +421,8 @@ var tetris = {
             });
             me.curX = tempX;
             me.curY = tempY;
+            // tetroid is now resting
+            me.setPiece();
 		},
 
 		collisionDistance:function(x,y,shape) {
