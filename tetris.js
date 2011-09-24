@@ -405,8 +405,22 @@ var tetris = {
 		},
 
 		fall:function() {
-            downwardMove = this.collisionDistance(this.curX,this.curY,this.curShape);
-            console.log(downwardMove); // debug
+            var me = this;
+            downwardMove = me.collisionDistance(me.curX,me.curY,me.curShape);
+
+            var tempX = me.curX;
+            var tempY = me.curY + downwardMove;
+            // set these variables as if it were just a move('D')
+            var s = "top";
+            var dir = 'D'
+
+            me.curSqs.eachdo(function(i) {
+                var l = parseInt(this.style[s],10);
+                l += downwardMove * me.pSize; 
+                this.style[s] = l + 'px'; // css coords are used to position blocks on the page
+            });
+            me.curX = tempX;
+            me.curY = tempY;
 		},
 
 		collisionDistance:function(x,y,shape) {
