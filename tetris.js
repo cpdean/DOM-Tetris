@@ -304,14 +304,7 @@ var tetris = {
 			var gameLoop = function() {
 				me.move('D');
 				if(me.curComplete) {
-					me.markBoardShape(me.curX,me.curY,me.curShape);
-					me.curSqs.eachdo(function() {
-						me.sqs.push(this);
-					});
-					me.calcScore({shape:true});
-					me.checkRows();
-					me.checkScore();
-					me.initShapes();
+                    me.setPiece();
 					me.play();
 				} else {
 					me.pTimer = setTimeout(gameLoop,me.speed);
@@ -320,6 +313,21 @@ var tetris = {
 			this.pTimer = setTimeout(gameLoop,me.speed);
 			this.isActive = 1;
 		},
+
+        setPiece:function(){
+            // take the current piece in play, set the blocks
+            // into the board, and bring the next piece into
+            // play
+			var me = this;
+            me.markBoardShape(me.curX,me.curY,me.curShape);
+            me.curSqs.eachdo(function() {
+                me.sqs.push(this);
+            });
+            me.calcScore({shape:true});
+            me.checkRows();
+            me.checkScore();
+            me.initShapes();
+        },
 
 		togglePause:function() {
 			if (this.isActive === 1) {
