@@ -62,7 +62,7 @@ var tetris = {
 		init:function() {
 			this.canvas = document.getElementById("canvas");
 			this.initBoard();
-			this.initInfo();
+			//this.initInfo();
 			this.initLevelScores();
 			this.initShapes();
 			this.bindKeyEvents();
@@ -158,7 +158,7 @@ var tetris = {
 		},
 
 		setInfo:function(el) {
-			this[el + 'Display'].innerHTML = this[el];
+			//this[el + 'Display'].innerHTML = this[el];
 		},
 
 		drawNextShape:function() {
@@ -166,9 +166,9 @@ var tetris = {
 				for (var i=0;i<this.nextShape.length;i++) {
 					ns[i] = this.createSquare(this.nextShape[i][0] + 2,this.nextShape[i][1] + 2,this.nextShapeIndex);
 				}
-				this.nextShapeDisplay.innerHTML = '';
+				//this.nextShapeDisplay.innerHTML = '';
 				for (var k=0;k<ns.length;k++) {
-					this.nextShapeDisplay.appendChild(ns[k]);
+					//this.nextShapeDisplay.appendChild(ns[k]);
 				}
 		},
 
