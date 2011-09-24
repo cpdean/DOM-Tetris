@@ -227,6 +227,8 @@ var tetris = {
 		},
 
 		removeCur:function() {
+            // undraws blocks in motion
+            // and then removes them from in the game's datastructure
 			var me = this;
 			this.curSqs.eachdo(function() {
 				me.canvas.removeChild(this);
