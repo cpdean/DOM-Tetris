@@ -368,6 +368,10 @@ var tetris = {
 					this.rotate();
 					return true;
 					break;
+				case 'F':
+					this.rotate(); // mapped to known function for debugging
+					return true;
+					break;
 				default:
 					throw new Error('wtf');
 					break;       
