@@ -5,11 +5,11 @@
 // hopefully we don't have concurrency issues with that model..
 
 function Player (white, game){
-    var this.white = white; // true/false
-    var this.game = game;
-    var this.spawnX=4;
-    var this.spawnY=1;
-    var this.shapes=[
+    this.white = white; // true/false
+    this.game = game;
+    this.spawnX=4;
+    this.spawnY=1;
+    this.shapes=[
         [
             [-1,0],[0,1],[1,0],[0,0] //TEE
         ],
@@ -632,7 +632,7 @@ Player.prototype.isSafari = function() {
 
 Player.prototype.bTest = function(rgx) {
 			return rgx.test(navigator.userAgent);
-		}
+		};
 
 		/*debug:function() {
 			var me = this;
@@ -647,10 +647,7 @@ Player.prototype.bTest = function(rgx) {
 			me.boardDiv.innerHTML = '';
 			me.boardDiv.appendChild(par);
 		};*/
-};
 
-tetris.init();
-})();
 var tetris = {
 		board:[],
 		boardDiv:null,
@@ -720,6 +717,33 @@ var tetris = {
 			this.initShapes();
 			this.bindKeyEvents();
 			this.play();
+		},
+
+        initInfo:function() {
+			this.nextShapeDisplay = document.getElementById("next_shape");
+			this.levelDisplay = document.getElementById("level").getElementsByTagName("span")[0];
+			this.timeDisplay = document.getElementById("time").getElementsByTagName("span")[0];
+			this.scoreDisplay = document.getElementById("score").getElementsByTagName("span")[0];
+			this.linesDisplay = document.getElementById("lines").getElementsByTagName("span")[0];
+			this.setInfo('time');
+			this.setInfo('score');
+			this.setInfo('level');
+			this.setInfo('lines');
+		},
+
+        initTempShapes:function() {
+			this.tempShapes = [];
+			for (var i = 0;i<this.shapes.length;i++) {
+				this.tempShapes.push(i);
+			}
+			var k = this.tempShapes.length;
+			while ( --k ) { //Fisher Yates Shuffle
+				var j = Math.floor( Math.random() * ( k + 1 ) );
+				var tempk = this.tempShapes[k];
+				var tempj = this.tempShapes[j];
+				this.tempShapes[k] = tempj;
+				this.tempShapes[j] = tempk;
+			}
 		},
 
 		initPlayers:function() {
@@ -794,9 +818,31 @@ var tetris = {
 			}
 		},
 
+        initShapes:function() {
+            this.curSqs = [];
+            this.curComplete = false;
+            this.shiftTempShapes();
+            this.curShapeIndex = this.tempShapes[0];
+            this.curShape = this.shapes[this.curShapeIndex];
+            this.initNextShape();
+            this.setCurCoords(this.spawnX,this.spawnY);
+            this.drawShape(this.curX,this.curY,this.curShape);
+        },
+
 		setInfo:function(el) {
 			//this[el + 'Display'].innerHTML = this[el];
 		},
+
+        initNextShape:function() {
+            if (typeof this.tempShapes[1] === 'undefined') {this.initTempShapes();}
+            try {
+                this.nextShapeIndex = this.tempShapes[1];
+                this.nextShape = this.shapes[this.nextShapeIndex];
+                this.drawNextShape();
+            } catch(e) {
+                throw new Error("Could not create next shape. " + e);
+            }
+        },
 
 		drawNextShape:function() {
 				var ns = [];
